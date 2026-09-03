@@ -210,3 +210,40 @@ function fireConfetti() {
     colors: ["#ff4071", "#00e5ff", "#ffe600", "#7000ff"],
   });
 }
+
+// Drift Wall Interactive Mechanics
+const stage = document.querySelector(".drift-stage");
+const board = document.getElementById("driftBoard");
+
+if (stage && board) {
+  let targetX = 0;
+  let targetY = 0;
+  let currentX = 0;
+  let currentY = 0;
+
+  stage.addEventListener("mousemove", (e) => {
+    const rect = stage.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+    // Adjust drift distance factor
+    targetX = x * -100;
+    targetY = y * -60;
+  });
+
+  stage.addEventListener("mouseleave", () => {
+    targetX = 0;
+    targetY = 0;
+  });
+
+  // Smooth lerp loop
+  function animateDrift() {
+    currentX += (targetX - currentX) * 0.08;
+    currentY += (targetY - currentY) * 0.08;
+
+    board.style.transform = `rotate(-12deg) scale(1.15) translate3d(${currentX}px, ${currentY}px, 0)`;
+    requestAnimationFrame(animateDrift);
+  }
+
+  animateDrift();
+}

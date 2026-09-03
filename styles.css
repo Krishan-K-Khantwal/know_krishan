@@ -20,7 +20,11 @@
 }
 
 body {
-  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family:
+    "Space Grotesk",
+    -apple-system,
+    BlinkMacSystemFont,
+    sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-dark);
   line-height: 1.6;
@@ -70,7 +74,7 @@ body {
 }
 
 .brand {
-  font-family: 'Righteous', cursive;
+  font-family: "Righteous", cursive;
   font-size: 1.6rem;
   letter-spacing: 1px;
 }
@@ -97,9 +101,18 @@ body {
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+  0% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+  }
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 8px rgba(16, 185, 129, 0);
+  }
+  100% {
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+  }
 }
 
 .cta-pill-nav {
@@ -163,9 +176,20 @@ body {
   flex-direction: column;
 }
 
-.layer-formal { background: #ffeaec; z-index: 3; }
-.layer-casual { background: #e0f9ff; z-index: 2; opacity: 0; }
-.layer-beach  { background: #fff0b3; z-index: 1; opacity: 0; }
+.layer-formal {
+  background: #ffeaec;
+  z-index: 3;
+}
+.layer-casual {
+  background: #e0f9ff;
+  z-index: 2;
+  opacity: 0;
+}
+.layer-beach {
+  background: #fff0b3;
+  z-index: 1;
+  opacity: 0;
+}
 
 .avatar-ph {
   display: flex;
@@ -212,8 +236,12 @@ body {
 }
 
 @keyframes jitter {
-  0% { transform: rotate(-6deg) translate(0px, 0px); }
-  100% { transform: rotate(-5deg) translate(2px, 2px); }
+  0% {
+    transform: rotate(-6deg) translate(0px, 0px);
+  }
+  100% {
+    transform: rotate(-5deg) translate(2px, 2px);
+  }
 }
 
 .floating-badge {
@@ -226,8 +254,18 @@ body {
   color: #fff;
   box-shadow: 2px 2px 0px var(--border-dark);
 }
-.badge-1 { bottom: 60px; left: 30px; transform: rotate(10deg); }
-.badge-2 { top: 60px; right: 20px; transform: rotate(-8deg); background: var(--accent-yellow); color: var(--text-dark); }
+.badge-1 {
+  bottom: 60px;
+  left: 30px;
+  transform: rotate(10deg);
+}
+.badge-2 {
+  top: 60px;
+  right: 20px;
+  transform: rotate(-8deg);
+  background: var(--accent-yellow);
+  color: var(--text-dark);
+}
 
 /* HUD indicator */
 .layer-indicator {
@@ -238,7 +276,6 @@ body {
   z-index: 10;
   left: 50%;
   transform: translateX(-50%);
-
 }
 
 .indicator-step {
@@ -293,14 +330,18 @@ body {
 }
 
 .hero-title {
-  font-family: 'Righteous', cursive;
+  font-family: "Righteous", cursive;
   font-size: 4rem;
   line-height: 1.1;
   margin-bottom: 12px;
 }
 
 .neon-highlight {
-  background: linear-gradient(180deg, transparent 65%, var(--accent-yellow) 65%);
+  background: linear-gradient(
+    180deg,
+    transparent 65%,
+    var(--accent-yellow) 65%
+  );
 }
 
 .hero-subtitle {
@@ -384,7 +425,7 @@ body {
 }
 
 .check-list li::before {
-  content: '✓';
+  content: "✓";
   position: absolute;
   left: 0;
   color: #16a34a;
@@ -494,7 +535,7 @@ body {
 }
 
 .score-display {
-  font-family: 'Righteous', cursive;
+  font-family: "Righteous", cursive;
   font-size: 3rem;
   line-height: 1;
   color: var(--accent-pink);
@@ -508,7 +549,7 @@ body {
 .btn-match {
   width: 100%;
   padding: 18px;
-  font-family: 'Righteous', cursive;
+  font-family: "Righteous", cursive;
   font-size: 1.3rem;
   color: #fff;
   background: var(--accent-pink);
@@ -528,14 +569,66 @@ body {
   box-shadow: var(--shadow-active);
 }
 
-/* Footer */
+/* Footer & Social Pills */
 .footer {
   text-align: center;
-  padding: 40px;
+  padding: 48px 20px;
   border-top: 3px solid var(--border-dark);
   font-weight: 600;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-socials {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.social-pill {
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: var(--text-dark);
+  background: #ffffff;
+  padding: 8px 18px;
+  border: 2px solid var(--border-dark);
+  border-radius: 50px;
+  box-shadow: 3px 3px 0px var(--border-dark);
+  transition: all 0.15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.social-pill:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--border-dark);
+}
+
+.social-pill.ig:hover {
+  background: #ff4071;
+  color: #ffffff;
+}
+
+.social-pill.wa:hover {
+  background: #25d366;
+  color: #ffffff;
+}
+
+.social-pill.x:hover {
+  background: #121212;
+  color: #ffffff;
+}
+
+.social-pill:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-active);
 }
 
 /* Responsive Overrides */
@@ -543,7 +636,7 @@ body {
   .scroll-container {
     flex-direction: column;
   }
-  
+
   .sticky-visual-wrapper {
     position: relative;
     top: 0;
@@ -555,7 +648,7 @@ body {
   .character-card {
     height: 380px;
   }
-  
+
   .content-stream {
     flex: auto;
     padding: 20px;
@@ -564,4 +657,97 @@ body {
   .hero-title {
     font-size: 2.8rem;
   }
+}
+/* Drift Wall Component */
+.drift-wall-container {
+  position: relative;
+  background: var(--bg-primary);
+  border-top: 3px solid var(--border-dark);
+  padding: 60px 0 80px 0;
+  overflow: hidden;
+}
+
+.drift-wall-header {
+  text-align: center;
+  position: relative;
+  z-index: 5;
+  margin-bottom: 25px;
+  pointer-events: none;
+}
+
+.drift-wall-header h2 {
+  font-family: "Righteous", cursive;
+  font-size: 2.8rem;
+  margin-top: 10px;
+}
+
+.drift-wall-header p {
+  color: #64748b;
+  font-weight: 600;
+}
+
+/* Expanded Viewport to comfortably display 4 rows */
+.drift-stage {
+  position: relative;
+  width: 100vw;
+  height: 680px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Board tilted with extra scale to hide outer edges during drag/drift */
+.drift-board {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  transform: rotate(-10deg) scale(1.2);
+  will-change: transform;
+}
+
+.drift-row {
+  display: flex;
+  gap: 20px;
+}
+
+/* Alternating offsets for brick-lay staggering */
+.drift-row.offset-1 {
+  transform: translateX(-120px);
+}
+.drift-row.offset-2 {
+  transform: translateX(-50px);
+}
+.drift-row.offset-3 {
+  transform: translateX(-160px);
+}
+
+.drift-cell {
+  width: 220px;
+  height: 160px;
+  background: #ffffff;
+  border: 3px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-block);
+  overflow: hidden;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.drift-cell img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.drift-cell:hover {
+  transform: scale(1.1) translateZ(10px);
+  box-shadow: 10px 10px 0px var(--border-dark);
+  z-index: 10;
 }
