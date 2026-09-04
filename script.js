@@ -5,12 +5,11 @@ document.addEventListener("DOMContentLoaded", () => {
   initCustomCursor();
   initScrollAnimations();
   initCompatibilityQuiz();
+  initDriftWall();
 });
 
 /**
  * 1. Custom Pointer / Micro-interactions
- * Fix: Uses gsap.set({ xPercent: -50, yPercent: -50 }) so GSAP never strips
- * the centering offset, locking both the dot and ring directly to the pointer tip.
  */
 function initCustomCursor() {
   const dot = document.getElementById("cursorDot");
@@ -43,7 +42,7 @@ function initCustomCursor() {
 
   // Scale cursor smoothly on hoverable elements
   const hoverables = document.querySelectorAll(
-    "button, a, .quirk-pill, .spec-card",
+    "button, a, .quirk-pill, .spec-card, .drift-cell",
   );
   hoverables.forEach((el) => {
     el.addEventListener("mouseenter", () => {
@@ -75,7 +74,7 @@ function initScrollAnimations() {
   const dot2 = document.getElementById("dot2");
   const dot3 = document.getElementById("dot3");
 
-  // Create Master Timeline for Outfit/Stage Progression
+  // Master Timeline for Outfit/Stage Progression
   const stageTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".scroll-container",
@@ -86,15 +85,14 @@ function initScrollAnimations() {
   });
 
   // Phase 1 -> Phase 2: Fade Formal into Casual (Mid Scroll)
-
   stageTimeline
     .to(layerFormal, { opacity: 0, duration: 1, ease: "power1.inOut" }, 0.5)
     .to(layerCasual, { opacity: 1, duration: 1, ease: "power1.inOut" }, 0.5)
     .call(
       () => {
-        if (dot1.classList.contains("active")) {
+        if (dot1 && dot1.classList.contains("active")) {
           updateHUD(2);
-        } else if (dot2.classList.contains("active")) {
+        } else if (dot2 && dot2.classList.contains("active")) {
           updateHUD(1);
         }
       },
@@ -108,7 +106,7 @@ function initScrollAnimations() {
     .to(layerBeach, { opacity: 1, duration: 1, ease: "power1.inOut" }, 1.8)
     .call(
       () => {
-        if (dot3.classList.contains("active")) {
+        if (dot3 && dot3.classList.contains("active")) {
           updateHUD(2);
         } else {
           updateHUD(3);
@@ -145,41 +143,121 @@ function initScrollAnimations() {
 }
 
 /**
- * 3. Interactive Quiz & Fireworks Confetti
+ * 3. 4-Question Compatibility Calculator (Pass >= 60%, Fail < 60%)
  */
 function initCompatibilityQuiz() {
   const buttons = document.querySelectorAll(".quiz-btn");
   const scoreNum = document.getElementById("scoreNumber");
   const verdict = document.getElementById("scoreVerdict");
+  const subtext = document.getElementById("scoreSubtext");
   const matchBtn = document.getElementById("matchBtn");
+
+  const totalQuestions = 4;
+  const userAnswers = {};
 
   buttons.forEach((btn) => {
     btn.addEventListener("click", () => {
-      buttons.forEach((b) => b.classList.remove("selected"));
-      btn.classList.add("selected");
-
+      const qIndex = btn.dataset.q;
       const score = parseInt(btn.dataset.score, 10);
-      animateCounter(scoreNum, score);
 
-      if (score >= 90) {
-        verdict.innerHTML =
-          "<strong>Soulmate Territory.</strong> Our shared eccentricities line up flawlessly.";
-      } else if (score >= 70) {
-        verdict.innerHTML =
-          "<strong>Extremely Promising.</strong> Strong synergy with safe room for banter.";
+      // Deselect sibling buttons in this specific question group
+      const siblingButtons = document.querySelectorAll(
+        `.quiz-btn[data-q="${qIndex}"]`,
+      );
+      siblingButtons.forEach((b) => b.classList.remove("selected"));
+
+      // Mark current button active
+      btn.classList.add("selected");
+      userAnswers[qIndex] = score;
+
+      const answeredCount = Object.keys(userAnswers).length;
+      const currentTotal = Object.values(userAnswers).reduce(
+        (a, b) => a + b,
+        0,
+      );
+      const calculatedScore = Math.round(currentTotal / answeredCount);
+
+      animateCounter(scoreNum, calculatedScore);
+
+      if (answeredCount < totalQuestions) {
+        const remaining = totalQuestions - answeredCount;
+        if (subtext)
+          subtext.innerText = `${remaining} question${remaining > 1 ? "s" : ""} remaining`;
+        if (verdict)
+          verdict.innerText =
+            "Answer all questions to compute our probability!";
+        if (matchBtn) {
+          matchBtn.disabled = true;
+          matchBtn.className = "btn-match";
+          matchBtn.innerText = `🔒 Answer All Questions (${answeredCount}/${totalQuestions})`;
+          matchBtn.onclick = null; // Ensure it doesn't redirect prematurely
+        }
       } else {
-        verdict.innerHTML =
-          "<strong>Run Away.</strong> This looks like early morning cardio, which violates my religion.";
+        // All 4 questions answered
+        matchBtn.disabled = false;
+
+        if (calculatedScore >= 60) {
+          if (subtext) {
+            subtext.innerText = "✅ Compatibility Threshold Surpassed!";
+          }
+          if (verdict) {
+            verdict.innerHTML =
+              "<strong>Soulmate Energy!</strong> We have high synergy and chaotic masti.";
+            matchBtn.className = "btn-match pass";
+            matchBtn.innerText = "🚀 Swipe Right / Lock In Date!";
+
+            matchBtn.onclick = () => {
+              setTimeout(() => {
+                window.location.href = "https://www.google.com";
+              }, 2000);
+            };
+          }
+        } else {
+          if (subtext) subtext.innerText = "❌ Compatibility Threshold Failed!";
+          if (verdict)
+            verdict.innerHTML =
+              "<strong>Zero Synergy.</strong> We would disagree on snacks, dogs, and morning hours.";
+          matchBtn.className = "btn-match fail";
+          matchBtn.innerText = "💀 Better luck next life!";
+
+          // Clear any leftover click events if they failed
+          matchBtn.onclick = null;
+        }
       }
     });
   });
 
-  // Confetti Blast on Final CTA
+  // Action Button Click Handling
   if (matchBtn) {
     matchBtn.addEventListener("click", () => {
-      fireConfetti();
-      matchBtn.innerText = "✨ It's a Match! Message Sent!";
-      matchBtn.style.backgroundColor = "#10b981";
+      if (matchBtn.disabled) return;
+
+      const answeredCount = Object.keys(userAnswers).length;
+      if (answeredCount < totalQuestions) return;
+
+      const currentTotal = Object.values(userAnswers).reduce(
+        (a, b) => a + b,
+        0,
+      );
+      const calculatedScore = Math.round(currentTotal / answeredCount);
+
+      if (calculatedScore >= 60) {
+        fireConfetti();
+        matchBtn.innerText = "✨ Date Confirmed! Ping Me On WhatsApp!";
+      } else {
+        // Rejection wobble effect
+        gsap.fromTo(
+          matchBtn,
+          { x: -10 },
+          {
+            x: 10,
+            duration: 0.08,
+            repeat: 5,
+            yoyo: true,
+            onComplete: () => gsap.set(matchBtn, { x: 0 }),
+          },
+        );
+      }
     });
   }
 }
@@ -188,7 +266,7 @@ function initCompatibilityQuiz() {
 function animateCounter(element, target) {
   if (!element) return;
   let current = 0;
-  const step = Math.ceil(target / 20);
+  const step = Math.ceil(target / 20) || 1;
   const timer = setInterval(() => {
     current += step;
     if (current >= target) {
@@ -211,37 +289,61 @@ function fireConfetti() {
   });
 }
 
-// Drift Wall Interactive Mechanics
-const stage = document.querySelector(".drift-stage");
-const board = document.getElementById("driftBoard");
+/**
+ * 4. Drift Wall Mechanics (Desktop Mouse + Mobile Touch)
+ */
+function initDriftWall() {
+  const stage = document.querySelector(".drift-stage");
+  const board = document.getElementById("driftBoard");
 
-if (stage && board) {
+  if (!stage || !board) return;
+
   let targetX = 0;
   let targetY = 0;
   let currentX = 0;
   let currentY = 0;
 
-  stage.addEventListener("mousemove", (e) => {
+  function updateCoordinates(clientX, clientY) {
     const rect = stage.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width - 0.5;
-    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    const x = (clientX - rect.left) / rect.width - 0.5;
+    const y = (clientY - rect.top) / rect.height - 0.5;
 
-    // Adjust drift distance factor
-    targetX = x * -100;
-    targetY = y * -60;
+    const isMobile = window.innerWidth <= 900;
+    targetX = x * (isMobile ? -100 : -260);
+    targetY = y * (isMobile ? -60 : -140);
+  }
+
+  // Desktop Mouse
+  stage.addEventListener("mousemove", (e) => {
+    updateCoordinates(e.clientX, e.clientY);
   });
+
+  // Mobile Touch
+  stage.addEventListener(
+    "touchmove",
+    (e) => {
+      if (e.touches.length > 0) {
+        updateCoordinates(e.touches[0].clientX, e.touches[0].clientY);
+      }
+    },
+    { passive: true },
+  );
 
   stage.addEventListener("mouseleave", () => {
     targetX = 0;
     targetY = 0;
   });
 
-  // Smooth lerp loop
+  // Smooth lerp rendering loop
   function animateDrift() {
     currentX += (targetX - currentX) * 0.08;
     currentY += (targetY - currentY) * 0.08;
 
-    board.style.transform = `rotate(-12deg) scale(1.15) translate3d(${currentX}px, ${currentY}px, 0)`;
+    const isMobile = window.innerWidth <= 900;
+    const baseRotation = isMobile ? -6 : -10;
+    const baseScale = isMobile ? 0.95 : 1.2;
+
+    board.style.transform = `rotate(${baseRotation}deg) scale(${baseScale}) translate3d(${currentX}px, ${currentY}px, 0)`;
     requestAnimationFrame(animateDrift);
   }
 
