@@ -208,7 +208,8 @@ function initCompatibilityQuiz() {
 
             matchBtn.onclick = () => {
               setTimeout(() => {
-                window.location.href = "https://www.google.com";
+                window.location.href =
+                  "https://wa.me/917505380696?text=HEY!!%20Cutie!";
               }, 2000);
             };
           }
