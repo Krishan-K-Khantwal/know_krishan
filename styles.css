@@ -28,8 +28,13 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-dark);
   line-height: 1.6;
-  overflow-x: hidden;
   cursor: default;
+}
+
+/* Confine horizontal bleed only to visual components without killing sticky parents */
+.drift-stage,
+.drift-wall-container {
+  overflow-x: hidden;
 }
 
 /* Custom Interactive Cursor */
@@ -140,10 +145,11 @@ body {
   position: relative;
 }
 
-/* Visual Left Column (Sticky Stage) */
+/* Visual Left Column (Sticky Stage Desktop) */
 .sticky-visual-wrapper {
   flex: 0 0 45%;
   height: calc(100vh - 70px);
+  position: -webkit-sticky;
   position: sticky;
   top: 70px;
   display: flex;
@@ -212,7 +218,8 @@ body {
 
 .character-img {
   max-width: 85%;
-  max-height: 340px;
+  max-height: 340px !important;
+  height: auto !important;
   object-fit: contain;
   filter: drop-shadow(4px 4px 0px var(--border-dark));
   pointer-events: none;
@@ -800,10 +807,10 @@ body {
 }
 
 /* ============================================================
-   MOBILE & TABLET OPTIMIZATION (Responsive Breakpoints)
+   MOBILE & TABLET OPTIMIZATION (Unified Single Breakpoint)
    ============================================================ */
 
-/* Hide custom cursor completely on touch devices */
+/* Disable desktop cursor on mobile/touch */
 @media (hover: none) and (pointer: coarse) {
   .cursor-dot,
   .cursor-ring {
@@ -815,12 +822,6 @@ body {
 }
 
 @media (max-width: 900px) {
-  html,
-  body {
-    overflow-x: hidden;
-    width: 100%;
-  }
-
   .navbar {
     padding: 0 16px;
     height: 60px;
@@ -839,78 +840,171 @@ body {
     padding: 6px 12px;
   }
 
+  /* Unravel side-by-side flex layout into a block stream */
   .scroll-container {
-    flex-direction: column;
-    margin-top: 60px;
+    display: block !important;
+    width: 100% !important;
+    margin-top: 60px !important;
+    position: relative !important;
   }
 
+  /* Compact Sticky Visual Card on Mobile */
   .sticky-visual-wrapper {
-    position: relative;
-    top: 0;
-    flex: auto;
-    width: 100%;
-    height: 380px;
-    padding: 16px;
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 60px !important;
+    height: 220px !important;
+    width: 100% !important;
+    padding: 8px 12px !important;
+    z-index: 50 !important;
+    background: var(--bg-primary) !important;
+    border-bottom: 3px solid var(--border-dark) !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
   .character-card {
-    width: 100%;
-    max-width: 320px;
-    height: 340px;
-    margin: 0 auto;
+    width: 100% !important;
+    max-width: 220px !important;
+    height: 195px !important;
+    margin: 0 auto !important;
+    border-width: 3px !important;
+    box-shadow: 4px 4px 0px var(--border-dark) !important;
   }
 
   .character-img {
-    max-height: 220px;
+    max-height: 120px !important;
+    height: auto !important;
+    width: auto !important;
   }
 
+  .sticker {
+    font-size: 0.65rem !important;
+    top: 6px !important;
+    padding: 3px 6px !important;
+  }
+  /* Scaled Badges & Overlays for Mobile Card */
+  .sticker {
+    font-size: 0.6rem !important;
+    top: 6px !important;
+    padding: 2px 6px !important;
+    transform: rotate(-3deg) !important;
+  }
+
+  /* Scaled & Centered Censored Tape */
+  .censored-bar {
+    font-size: 0.65rem !important;
+    letter-spacing: 1px !important;
+    padding: 3px 8px !important;
+    transform: rotate(-5deg) !important;
+    white-space: nowrap !important;
+    width: auto !important;
+    max-width: 90% !important;
+  }
+
+  /* Badge 1: 100°C (Bottom Left, tucked safely above the HUD) */
+  .badge-1 {
+    bottom: 30px !important;
+    left: 8px !important;
+    top: auto !important;
+    right: auto !important;
+    font-size: 0.55rem !important;
+    padding: 2px 5px !important;
+    transform: rotate(6deg) !important;
+  }
+
+  /* Badge 2: MOM DO NOT LOOK (Top Right, clear of the image face) */
+  .badge-2 {
+    top: 10px !important;
+    right: 8px !important;
+    bottom: auto !important;
+    left: auto !important;
+    font-size: 0.55rem !important;
+    padding: 2px 5px !important;
+    transform: rotate(-6deg) !important;
+    white-space: nowrap !important;
+  }
+
+  /* Ensure the HUD indicator buttons stay neatly pinned to the bottom */
+  .layer-indicator {
+    bottom: 5px !important;
+    gap: 3px !important;
+  }
+
+  .indicator-step {
+    font-size: 0.55rem !important;
+    padding: 2px 4px !important;
+    border-radius: 3px !important;
+  }
+  .layer-indicator {
+    bottom: 6px !important;
+    gap: 4px !important;
+  }
+
+  .indicator-step {
+    font-size: 0.6rem !important;
+    padding: 2px 5px !important;
+    border-radius: 4px !important;
+    box-shadow: 1px 1px 0px var(--border-dark) !important;
+  }
+
+  /* Content area scrolls cleanly below the docked visual */
   .content-stream {
-    flex: auto;
-    width: 100%;
-    padding: 20px 16px 60px 16px;
+    width: 100% !important;
+    padding: 20px 16px 60px 16px !important;
   }
 
   .panel {
-    min-height: auto;
-    padding: 40px 0;
+    min-height: auto !important;
+    padding: 30px 0 !important;
   }
 
   .hero-title {
-    font-size: 2.6rem;
+    font-size: 2.4rem !important;
   }
 
   .hero-subtitle {
-    font-size: 1.1rem;
+    font-size: 1rem !important;
   }
 
   .quick-specs-grid {
-    grid-template-columns: 1fr;
-    gap: 12px;
+    grid-template-columns: 1fr !important;
+    gap: 10px !important;
   }
 
   .interactive-card {
-    padding: 20px 16px;
+    padding: 20px 14px !important;
   }
 
   .score-display {
-    font-size: 2.2rem;
+    font-size: 2.2rem !important;
   }
 
   .quiz-btn {
-    font-size: 0.9rem;
-    padding: 10px 14px;
+    font-size: 0.88rem !important;
+    padding: 10px 12px !important;
+  }
+
+  /* Drift Wall mobile layout */
+  .drift-wall-container {
+    padding: 40px 0 60px 0 !important;
+  }
+
+  .drift-wall-header h2 {
+    font-size: 1.8rem !important;
   }
 
   .drift-stage {
-    height: 520px;
+    height: 440px !important;
   }
 
   .drift-board {
-    transform: rotate(-6deg) scale(0.95);
+    transform: rotate(-6deg) scale(0.9) !important;
   }
 
   .drift-cell {
-    width: 160px;
-    height: 120px;
+    width: 140px !important;
+    height: 105px !important;
   }
 }
