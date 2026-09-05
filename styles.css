@@ -184,15 +184,20 @@ body {
 
 .layer-formal {
   background: #ffeaec;
-  z-index: 3;
+  z-index: 4;
 }
 .layer-casual {
   background: #e0f9ff;
-  z-index: 2;
+  z-index: 3;
   opacity: 0;
 }
 .layer-beach {
   background: #fff0b3;
+  z-index: 2;
+  opacity: 0;
+}
+.layer-quiz {
+  background: #f3e8ff;
   z-index: 1;
   opacity: 0;
 }
@@ -236,6 +241,12 @@ body {
   background: #fff;
   transform: rotate(-4deg);
   z-index: 5;
+}
+
+.tag-quiz {
+  background: #ffffff;
+  border: 2px solid var(--border-dark);
+  box-shadow: 3px 3px 0px var(--border-dark);
 }
 
 .censored-bar {
@@ -287,6 +298,13 @@ body {
   background: var(--accent-yellow);
   color: var(--text-dark);
 }
+.badge-quiz {
+  bottom: 60px;
+  right: 25px;
+  background: var(--accent-purple);
+  color: #fff;
+  transform: rotate(-6deg);
+}
 
 /* Layer HUD Step Indicators */
 .layer-indicator {
@@ -297,17 +315,17 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   width: max-content;
   z-index: 10;
 }
 
 .indicator-step {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   font-weight: 700;
   background: #ffffff;
   border: 2px solid var(--border-dark);
-  padding: 4px 10px;
+  padding: 4px 8px;
   border-radius: 6px;
   box-shadow: 2px 2px 0px var(--border-dark);
   white-space: nowrap;
@@ -511,38 +529,131 @@ body {
   color: var(--accent-purple);
 }
 
-/* Multi-Question Compatibility Engine */
+/* ============================================================
+   CARD-BY-CARD DECK QUIZ PANEL
+   ============================================================ */
 .interactive-card {
   background: #fff;
   border: 4px solid var(--border-dark);
   box-shadow: 8px 8px 0px var(--border-dark);
-  padding: 36px;
+  padding: 32px;
   border-radius: var(--radius-lg);
 }
 
-.quiz-questions-wrapper {
+.quiz-deck-container {
+  position: relative;
+  min-height: 480px;
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin: 25px 0;
+  justify-content: space-between;
 }
 
-.quiz-step {
+.deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px dashed #cbd5e1;
+  padding-bottom: 12px;
+  margin-bottom: 18px;
+}
+
+.deck-header .badge-pop {
+  margin-bottom: 0;
+}
+
+.step-progress-label {
+  font-family: "Righteous", cursive;
+  font-size: 0.95rem;
+  color: #64748b;
+}
+
+.deck-cards-wrapper {
+  position: relative;
+  min-height: 330px;
+  display: grid; /* Enables perfect stacking for the swipe transition */
+}
+
+/* Card Transitions with CSS Grid visibility trick */
+.quiz-card {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateX(40px) scale(0.98);
+  transition:
+    opacity 0.35s ease,
+    transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1),
+    visibility 0.4s;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.quiz-card.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.card-intro,
+.card-results {
+  text-align: center;
+  align-items: center;
+}
+
+.card-hero-title {
+  font-family: "Righteous", cursive;
+  font-size: 2.1rem;
+  margin-bottom: 10px;
+  line-height: 1.2;
+}
+
+.card-hero-subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #475569;
+  max-width: 480px;
+  margin: 0 auto 20px auto;
+}
+
+.intro-perks {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  margin-bottom: 25px;
+  width: 100%;
 }
 
-.quiz-step-title {
+.perk-item {
+  background: #f8fafc;
+  border: 2px solid var(--border-dark);
+  padding: 10px 14px;
+  font-weight: 700;
+  border-radius: var(--radius-sm);
+  box-shadow: 2px 2px 0px var(--border-dark);
+}
+
+.q-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent-purple);
+  margin-bottom: 6px;
+}
+
+.q-heading {
   font-family: "Righteous", cursive;
-  font-size: 1.1rem;
-  color: var(--text-dark);
+  font-size: 1.35rem;
+  margin-bottom: 16px;
 }
 
 .quiz-options {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
+  width: 100%;
 }
 
 .quiz-btn {
@@ -571,8 +682,67 @@ body {
   box-shadow: 1px 1px 0px var(--border-dark) !important;
 }
 
+.btn-deck-action {
+  width: 100%;
+  max-width: 320px;
+  padding: 16px;
+  font-family: "Righteous", cursive;
+  font-size: 1.25rem;
+  background: var(--accent-yellow);
+  border: 3px solid var(--border-dark);
+  box-shadow: var(--shadow-block);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.btn-deck-action:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--border-dark);
+}
+
+.deck-nav-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 20px;
+  padding-top: 15px;
+  border-top: 2px dashed #cbd5e1;
+}
+
+.btn-deck-nav {
+  padding: 10px 20px;
+  font-family: "Righteous", cursive;
+  font-size: 1rem;
+  background: #ffffff;
+  border: 2px solid var(--border-dark);
+  box-shadow: 3px 3px 0px var(--border-dark);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all 0.15s ease;
+}
+
+.btn-deck-nav.next {
+  background: var(--accent-cyan);
+  margin-left: auto;
+}
+
+.btn-deck-nav:hover:not(:disabled) {
+  transform: translate(-2px, -2px);
+  box-shadow: 5px 5px 0px var(--border-dark);
+}
+
+.btn-deck-nav:disabled {
+  background: #e2e8f0;
+  color: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
 .quiz-result {
-  margin: 24px 0;
+  margin: 20px 0;
   padding: 20px;
   border: 3px dashed var(--border-dark);
   display: flex;
@@ -580,6 +750,7 @@ body {
   gap: 20px;
   border-radius: var(--radius-sm);
   background: #fafafa;
+  width: 100%;
 }
 
 .score-display {
@@ -593,6 +764,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
+  text-align: left;
 }
 
 .score-verdict {
@@ -630,14 +802,6 @@ body {
   box-shadow: var(--shadow-active);
 }
 
-.btn-match:disabled {
-  background: #cbd5e1 !important;
-  color: #64748b !important;
-  cursor: not-allowed;
-  box-shadow: none !important;
-  transform: none !important;
-}
-
 .btn-match.pass {
   background: #10b981 !important;
   color: #ffffff;
@@ -646,6 +810,18 @@ body {
 .btn-match.fail {
   background: #ef4444 !important;
   color: #ffffff;
+}
+
+.btn-retake {
+  margin-top: 14px;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: underline;
+  cursor: pointer;
+  color: #64748b;
 }
 
 /* Footer & Social Pills */
@@ -820,7 +996,31 @@ body {
     cursor: auto !important;
   }
 }
+/* Family Page Link Button */
+.btn-family-link {
+  display: block;
+  width: 100%;
+  padding: 18px;
+  font-family: "Righteous", cursive;
+  font-size: 1.3rem;
+  color: #fff;
+  background: var(--accent-purple);
+  border: 3px solid var(--border-dark);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
 
+.btn-family-link:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--border-dark);
+}
+
+.btn-family-link:active {
+  transform: translate(3px, 3px);
+  box-shadow: var(--shadow-active);
+}
 @media (max-width: 900px) {
   .navbar {
     padding: 0 16px;
@@ -880,19 +1080,12 @@ body {
   }
 
   .sticker {
-    font-size: 0.65rem !important;
-    top: 6px !important;
-    padding: 3px 6px !important;
-  }
-  /* Scaled Badges & Overlays for Mobile Card */
-  .sticker {
     font-size: 0.6rem !important;
     top: 6px !important;
     padding: 2px 6px !important;
     transform: rotate(-3deg) !important;
   }
 
-  /* Scaled & Centered Censored Tape */
   .censored-bar {
     font-size: 0.65rem !important;
     letter-spacing: 1px !important;
@@ -903,7 +1096,6 @@ body {
     max-width: 90% !important;
   }
 
-  /* Badge 1: 100°C (Bottom Left, tucked safely above the HUD) */
   .badge-1 {
     bottom: 30px !important;
     left: 8px !important;
@@ -914,7 +1106,6 @@ body {
     transform: rotate(6deg) !important;
   }
 
-  /* Badge 2: MOM DO NOT LOOK (Top Right, clear of the image face) */
   .badge-2 {
     top: 10px !important;
     right: 8px !important;
@@ -926,26 +1117,26 @@ body {
     white-space: nowrap !important;
   }
 
-  /* Ensure the HUD indicator buttons stay neatly pinned to the bottom */
+  .badge-quiz {
+    bottom: 30px !important;
+    right: 8px !important;
+    top: auto !important;
+    left: auto !important;
+    font-size: 0.55rem !important;
+    padding: 2px 5px !important;
+    transform: rotate(-4deg) !important;
+  }
+
+  /* HUD Indicator scaled to accommodate all 4 dots comfortably */
   .layer-indicator {
     bottom: 5px !important;
     gap: 3px !important;
   }
 
   .indicator-step {
-    font-size: 0.55rem !important;
+    font-size: 0.52rem !important;
     padding: 2px 4px !important;
     border-radius: 3px !important;
-  }
-  .layer-indicator {
-    bottom: 6px !important;
-    gap: 4px !important;
-  }
-
-  .indicator-step {
-    font-size: 0.6rem !important;
-    padding: 2px 5px !important;
-    border-radius: 4px !important;
     box-shadow: 1px 1px 0px var(--border-dark) !important;
   }
 
@@ -977,13 +1168,25 @@ body {
     padding: 20px 14px !important;
   }
 
-  .score-display {
-    font-size: 2.2rem !important;
+  .card-hero-title {
+    font-size: 1.6rem !important;
+  }
+
+  .card-hero-subtitle {
+    font-size: 0.95rem !important;
+  }
+
+  .q-heading {
+    font-size: 1.15rem !important;
   }
 
   .quiz-btn {
     font-size: 0.88rem !important;
     padding: 10px 12px !important;
+  }
+
+  .score-display {
+    font-size: 2.2rem !important;
   }
 
   /* Drift Wall mobile layout */

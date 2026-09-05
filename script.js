@@ -63,67 +63,89 @@ function initCustomCursor() {
 }
 
 /**
- * 2. Visual Layer Transitions Driven by Scroll
+ * 2. Visual Layer Transitions Driven by Scroll (4 Outfits)
+ * FIX: Explicit fromTo properties & progress tracking for bulletproof reverse scrolling.
  */
 function initScrollAnimations() {
   const layerFormal = document.getElementById("layerFormal");
   const layerCasual = document.getElementById("layerCasual");
   const layerBeach = document.getElementById("layerBeach");
+  const layerQuiz = document.getElementById("layerQuiz");
 
   const dot1 = document.getElementById("dot1");
   const dot2 = document.getElementById("dot2");
   const dot3 = document.getElementById("dot3");
+  const dot4 = document.getElementById("dot4");
 
-  // Master Timeline for Outfit/Stage Progression
+  // Master Timeline for 4 Outfits
   const stageTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".scroll-container",
       start: "top top",
       end: "bottom bottom",
       scrub: 0.8,
+      onUpdate: (self) => {
+        // Tie the HUD dots directly to scroll math so it never breaks in reverse
+        const p = self.progress;
+        if (p < 0.25) updateHUD(1);
+        else if (p >= 0.25 && p < 0.58) updateHUD(2);
+        else if (p >= 0.58 && p < 0.9) updateHUD(3);
+        else updateHUD(4);
+      },
     },
   });
 
-  // Phase 1 -> Phase 2: Fade Formal into Casual (Mid Scroll)
+  // Phase 1 -> 2: Formal into Casual
   stageTimeline
-    .to(layerFormal, { opacity: 0, duration: 1, ease: "power1.inOut" }, 0.5)
-    .to(layerCasual, { opacity: 1, duration: 1, ease: "power1.inOut" }, 0.5)
-    .call(
-      () => {
-        if (dot1 && dot1.classList.contains("active")) {
-          updateHUD(2);
-        } else if (dot2 && dot2.classList.contains("active")) {
-          updateHUD(1);
-        }
-      },
-      null,
-      0.5,
+    .fromTo(
+      layerFormal,
+      { opacity: 1 },
+      { opacity: 0, duration: 1, ease: "power1.inOut" },
+      0,
+    )
+    .fromTo(
+      layerCasual,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power1.inOut" },
+      0,
+    )
+
+    // Phase 2 -> 3: Casual into Censored Beach Mode
+    .fromTo(
+      layerCasual,
+      { opacity: 1 },
+      { opacity: 0, duration: 1, ease: "power1.inOut" },
+      1,
+    )
+    .fromTo(
+      layerBeach,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power1.inOut" },
+      1,
+    )
+
+    // Phase 3 -> 4: Beach Mode into Quiz Detective Mode
+    .fromTo(
+      layerBeach,
+      { opacity: 1 },
+      { opacity: 0, duration: 1, ease: "power1.inOut" },
+      2,
+    )
+    .fromTo(
+      layerQuiz,
+      { opacity: 0 },
+      { opacity: 1, duration: 1, ease: "power1.inOut" },
+      2,
     );
 
-  // Phase 2 -> Phase 3: Fade Casual into Censored Beach Mode (Deep Scroll)
-  stageTimeline
-    .to(layerCasual, { opacity: 0, duration: 1, ease: "power1.inOut" }, 1.8)
-    .to(layerBeach, { opacity: 1, duration: 1, ease: "power1.inOut" }, 1.8)
-    .call(
-      () => {
-        if (dot3 && dot3.classList.contains("active")) {
-          updateHUD(2);
-        } else {
-          updateHUD(3);
-        }
-      },
-      null,
-      1.8,
-    );
-
-  // Helper function to keep track of steps in the visual card HUD
   function updateHUD(step) {
-    [dot1, dot2, dot3].forEach((d) => {
+    [dot1, dot2, dot3, dot4].forEach((d) => {
       if (d) d.classList.remove("active");
     });
     if (step === 1 && dot1) dot1.classList.add("active");
     if (step === 2 && dot2) dot2.classList.add("active");
     if (step === 3 && dot3) dot3.classList.add("active");
+    if (step === 4 && dot4) dot4.classList.add("active");
   }
 
   // Floating Micro-Animations for Text and Cards
@@ -143,110 +165,151 @@ function initScrollAnimations() {
 }
 
 /**
- * 3. 4-Question Compatibility Calculator (Pass >= 60%, Fail < 60%)
+ * 3. Card-by-Card Swipe Deck Quiz Engine (5 Questions + Pass/Fail Logic)
  */
 function initCompatibilityQuiz() {
-  const buttons = document.querySelectorAll(".quiz-btn");
+  const cards = document.querySelectorAll(".quiz-card");
+  const startBtn = document.getElementById("startQuizBtn");
+  const prevBtn = document.getElementById("prevCardBtn");
+  const nextBtn = document.getElementById("nextCardBtn");
+  const navControls = document.getElementById("deckNavControls");
+  const progressLabel = document.getElementById("stepProgressLabel");
+  const retakeBtn = document.getElementById("retakeBtn");
+
   const scoreNum = document.getElementById("scoreNumber");
   const verdict = document.getElementById("scoreVerdict");
   const subtext = document.getElementById("scoreSubtext");
   const matchBtn = document.getElementById("matchBtn");
 
-  const totalQuestions = 4;
+  let currentStep = 0; // 0: Intro, 1-5: Questions, 6: Results
+  const totalQuestions = 5;
   const userAnswers = {};
 
-  buttons.forEach((btn) => {
-    btn.addEventListener("click", () => {
-      const qIndex = btn.dataset.q;
-      const score = parseInt(btn.dataset.score, 10);
+  function showStep(step) {
+    currentStep = step;
+    cards.forEach((card) => {
+      const cardStep = parseInt(card.dataset.step, 10);
+      card.classList.toggle("active", cardStep === currentStep);
+    });
 
-      // Deselect sibling buttons in this specific question group
-      const siblingButtons = document.querySelectorAll(
-        `.quiz-btn[data-q="${qIndex}"]`,
-      );
-      siblingButtons.forEach((b) => b.classList.remove("selected"));
+    if (currentStep === 0) {
+      if (navControls) navControls.style.display = "none";
+      if (progressLabel) progressLabel.innerText = "Ready to begin";
+    } else if (currentStep >= 1 && currentStep <= totalQuestions) {
+      if (navControls) navControls.style.display = "flex";
+      if (progressLabel)
+        progressLabel.innerText = `Step ${currentStep} of ${totalQuestions}`;
+      if (prevBtn) prevBtn.style.display = currentStep === 1 ? "none" : "block";
 
-      // Mark current button active
-      btn.classList.add("selected");
-      userAnswers[qIndex] = score;
-
-      const answeredCount = Object.keys(userAnswers).length;
-      const currentTotal = Object.values(userAnswers).reduce(
-        (a, b) => a + b,
-        0,
-      );
-      const calculatedScore = Math.round(currentTotal / answeredCount);
-
-      animateCounter(scoreNum, calculatedScore);
-
-      if (answeredCount < totalQuestions) {
-        const remaining = totalQuestions - answeredCount;
-        if (subtext)
-          subtext.innerText = `${remaining} question${remaining > 1 ? "s" : ""} remaining`;
-        if (verdict)
-          verdict.innerText =
-            "Answer all questions to compute our probability!";
-        if (matchBtn) {
-          matchBtn.disabled = true;
-          matchBtn.className = "btn-match";
-          matchBtn.innerText = `🔒 Answer All Questions (${answeredCount}/${totalQuestions})`;
-          matchBtn.onclick = null; // Ensure it doesn't redirect prematurely
-        }
-      } else {
-        // All 4 questions answered
-        matchBtn.disabled = false;
-
-        if (calculatedScore >= 60) {
-          if (subtext) {
-            subtext.innerText = "✅ Compatibility Threshold Surpassed!";
-          }
-          if (verdict) {
-            verdict.innerHTML =
-              "<strong>Soulmate Energy!</strong> We have high synergy and chaotic masti.";
-            matchBtn.className = "btn-match pass";
-            matchBtn.innerText = "🚀 Swipe Right / Lock In Date!";
-
-            matchBtn.onclick = () => {
-              setTimeout(() => {
-                window.location.href =
-                  "https://wa.me/917505380696?text=HEY!!%20Cutie!";
-              }, 2000);
-            };
-          }
-        } else {
-          if (subtext) subtext.innerText = "❌ Compatibility Threshold Failed!";
-          if (verdict)
-            verdict.innerHTML =
-              "<strong>Zero Synergy.</strong> We would disagree on snacks, dogs, and morning hours.";
-          matchBtn.className = "btn-match fail";
-          matchBtn.innerText = "💀 Better luck next life!";
-
-          // Clear any leftover click events if they failed
-          matchBtn.onclick = null;
-        }
+      // Unlock 'Next' only if user picked an option for this question
+      if (nextBtn) {
+        nextBtn.disabled = !userAnswers[currentStep];
+        nextBtn.innerText =
+          currentStep === totalQuestions ? "Finish & Compute 🎯" : "Next →";
       }
+    } else if (currentStep === 6) {
+      if (navControls) navControls.style.display = "none";
+      if (progressLabel) progressLabel.innerText = "Completed ✨";
+      computeFinalScore();
+    }
+  }
+
+  // Handle Option Clicks on Questions 1 through 5
+  const questionCards = document.querySelectorAll(
+    ".quiz-card[data-step='1'], .quiz-card[data-step='2'], .quiz-card[data-step='3'], .quiz-card[data-step='4'], .quiz-card[data-step='5']",
+  );
+
+  questionCards.forEach((card) => {
+    const qButtons = card.querySelectorAll(".quiz-btn");
+    const qIndex = parseInt(card.dataset.step, 10);
+
+    qButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        qButtons.forEach((b) => b.classList.remove("selected"));
+        btn.classList.add("selected");
+
+        const score = parseInt(btn.dataset.score, 10);
+        userAnswers[qIndex] = score;
+
+        // Unlock next button, but wait for manual click to proceed
+        if (nextBtn) nextBtn.disabled = false;
+      });
     });
   });
 
-  // Action Button Click Handling
+  if (startBtn) startBtn.addEventListener("click", () => showStep(1));
+  if (prevBtn)
+    prevBtn.addEventListener("click", () => showStep(currentStep - 1));
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (currentStep < totalQuestions) {
+        showStep(currentStep + 1);
+      } else {
+        showStep(6);
+      }
+    });
+  }
+
+  if (retakeBtn) {
+    retakeBtn.addEventListener("click", () => {
+      document
+        .querySelectorAll(".quiz-btn")
+        .forEach((b) => b.classList.remove("selected"));
+      for (let key in userAnswers) delete userAnswers[key];
+      showStep(0);
+    });
+  }
+
+  function computeFinalScore() {
+    const scores = Object.values(userAnswers);
+    const average = Math.round(
+      scores.reduce((a, b) => a + b, 0) / (scores.length || 1),
+    );
+
+    animateCounter(scoreNum, average);
+
+    if (average >= 60) {
+      if (subtext) subtext.innerText = "✅ Compatibility Threshold Surpassed!";
+      if (verdict)
+        verdict.innerHTML =
+          "<strong>Soulmate Energy!</strong> We have high synergy and chaotic masti.";
+      if (matchBtn) {
+        matchBtn.disabled = false;
+        matchBtn.className = "btn-match pass";
+        matchBtn.innerText = "🚀 Swipe Right / Lock In Date!";
+      }
+    } else {
+      if (subtext) subtext.innerText = "❌ Compatibility Threshold Failed!";
+      if (verdict)
+        verdict.innerHTML =
+          "<strong>Zero Synergy.</strong> We would disagree on snacks, dogs, and sleep schedules.";
+      if (matchBtn) {
+        matchBtn.disabled = false;
+        matchBtn.className = "btn-match fail";
+        matchBtn.innerText = "💀 Better luck next life!";
+      }
+    }
+  }
+
+  // Final Action Handling & WhatsApp Redirection
   if (matchBtn) {
     matchBtn.addEventListener("click", () => {
       if (matchBtn.disabled) return;
 
-      const answeredCount = Object.keys(userAnswers).length;
-      if (answeredCount < totalQuestions) return;
-
-      const currentTotal = Object.values(userAnswers).reduce(
-        (a, b) => a + b,
-        0,
+      const scores = Object.values(userAnswers);
+      const average = Math.round(
+        scores.reduce((a, b) => a + b, 0) / (scores.length || 1),
       );
-      const calculatedScore = Math.round(currentTotal / answeredCount);
 
-      if (calculatedScore >= 60) {
+      if (average >= 60) {
         fireConfetti();
-        matchBtn.innerText = "✨ Date Confirmed! Ping Me On WhatsApp!";
+        matchBtn.innerText = "✨ Opening WhatsApp...";
+        setTimeout(() => {
+          window.location.href =
+            "https://wa.me/917505380696?text=HEY!!%20Cutie!";
+        }, 2000);
       } else {
-        // Rejection wobble effect
+        // Playful rejection wobble
         gsap.fromTo(
           matchBtn,
           { x: -10 },

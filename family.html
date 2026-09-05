@@ -1,0 +1,514 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soon To Be Family | KRISHAN.EXE</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Righteous&family=Space+Grotesk:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg-primary: #fffdf7;
+        --bg-secondary: #fef08a;
+        --text-dark: #121212;
+        --accent-pink: #ff4071;
+        --accent-cyan: #00e5ff;
+        --accent-yellow: #ffe600;
+        --accent-purple: #7000ff;
+        --border-dark: #121212;
+        --shadow-block: 6px 6px 0px #121212;
+        --radius-sm: 8px;
+        --radius-lg: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Space Grotesk", sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-dark);
+        overflow-x: hidden;
+      }
+
+      /* Navbar */
+      .navbar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background: var(--bg-primary);
+        border-bottom: 3px solid var(--border-dark);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 5%;
+        z-index: 100;
+      }
+
+      .brand {
+        font-family: "Righteous", cursive;
+        font-size: 1.6rem;
+      }
+
+      .btn-back {
+        text-decoration: none;
+        font-weight: 700;
+        color: var(--text-dark);
+        background: var(--accent-cyan);
+        padding: 8px 18px;
+        border: 2px solid var(--border-dark);
+        box-shadow: 3px 3px 0px var(--border-dark);
+        border-radius: var(--radius-sm);
+        transition: all 0.15s ease;
+      }
+
+      .btn-back:hover {
+        transform: translate(-2px, -2px);
+        box-shadow: 5px 5px 0px var(--border-dark);
+      }
+
+      /* Header Layout */
+      .page-header {
+        margin-top: 120px;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .badge-pop {
+        display: inline-block;
+        font-weight: 700;
+        font-size: 0.85rem;
+        padding: 6px 14px;
+        border: 2px solid var(--border-dark);
+        background: var(--accent-yellow);
+        box-shadow: 2px 2px 0px var(--border-dark);
+        margin-bottom: 16px;
+      }
+
+      h1 {
+        font-family: "Righteous", cursive;
+        font-size: 3.5rem;
+        line-height: 1.2;
+        margin-bottom: 40px;
+      }
+
+      /* Infinite Scroll Marquee Layout based on dd08a3c1-bf2b-4fd4-8aaa-a5a36f67843a */
+      .family-section {
+        margin-bottom: 60px;
+      }
+
+      .section-title {
+        font-family: "Righteous", cursive;
+        font-size: 1.8rem;
+        padding-left: 5%;
+        margin-bottom: 15px;
+      }
+
+      /* Warning styling for the last section */
+      .warning-title {
+        color: #fff;
+        background: #dc2626;
+        display: inline-block;
+        padding: 10px 15px;
+        border: 3px solid var(--border-dark);
+        transform: rotate(-2deg);
+        margin: 0px 0px 36px 48px;
+      }
+
+      .marquee-container {
+        position: relative;
+        width: 100vw;
+        overflow: hidden;
+        background: #ffffff;
+        border-top: 4px solid var(--border-dark);
+        border-bottom: 4px solid var(--border-dark);
+        padding: 25px 0;
+        display: flex;
+        align-items: center;
+      }
+
+      /* Base track styles */
+      .marquee-track {
+        display: flex;
+        gap: 24px;
+        width: max-content;
+        /* Animation applied via specific classes below */
+      }
+
+      .track-left {
+        animation: scrollLeft 35s linear infinite;
+      }
+
+      .track-right {
+        animation: scrollRight 35s linear infinite;
+      }
+
+      .marquee-container:hover .marquee-track {
+        animation-play-state: paused;
+      }
+
+      /* Keyframes for seamless looping */
+      @keyframes scrollLeft {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      @keyframes scrollRight {
+        0% {
+          transform: translateX(-50%);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      /* Individual Photo Cards */
+      .family-card {
+        width: 180px;
+        height: 180px;
+        background: #e2e8f0;
+        border: 3px solid var(--border-dark);
+        border-radius: var(--radius-sm);
+        box-shadow: 4px 4px 0px var(--border-dark);
+        overflow: hidden;
+        flex-shrink: 0;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        cursor: pointer;
+      }
+
+      .family-card img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        pointer-events: none;
+      }
+
+      /* Fallback text if image is missing */
+      .family-card::after {
+        content: "PHOTO";
+        position: absolute;
+        font-weight: 700;
+        color: #94a3b8;
+        z-index: 0;
+      }
+      .family-card img {
+        z-index: 1;
+        position: relative;
+      }
+
+      .family-card:hover {
+        transform: translateY(-8px) scale(1.05);
+        box-shadow: 8px 8px 0px var(--border-dark);
+      }
+
+      @media (max-width: 900px) {
+        h1 {
+          font-size: 2.2rem;
+        }
+        .section-title {
+          font-size: 1.4rem;
+        }
+        .family-card {
+          width: 130px;
+          height: 130px;
+        }
+        .marquee-container {
+          padding: 15px 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="navbar">
+      <div class="brand">KRISHAN.EXE</div>
+      <a href="index.html" class="btn-back">← Back to Main</a>
+    </header>
+
+    <main>
+      <div class="page-header">
+        <span class="badge-pop">DOCUMENT: CLASSIFIED</span>
+        <h1>
+          Soon To Be Family <br /><span style="color: var(--accent-pink)"
+            >(if selected)</span
+          >
+        </h1>
+      </div>
+
+      <!-- Section 1 -->
+      <section class="family-section">
+        <h2 class="section-title">Sas, Sasur & Nanad</h2>
+        <div class="marquee-container" style="background: var(--bg-secondary)">
+          <div class="marquee-track track-left">
+            <!-- Original Set -->
+            <div class="family-card">
+              <img src="images/parivar/41.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/42.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/43.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/44.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/45.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/46.jpg" alt="" />
+            </div>
+            <!-- Duplicate Set for Seamless Infinite Loop -->
+            <div class="family-card">
+              <img src="images/parivar/41.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/42.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/43.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/44.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/45.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/parivar/46.jpg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2 -->
+      <section class="family-section">
+        <h2 class="section-title">Bhabis, Jeths & Behens & friends</h2>
+        <div class="marquee-container" style="background: #e0f9ff">
+          <div class="marquee-track track-right">
+            <!-- Original Set -->
+            <div class="family-card">
+              <img src="images/bhai/11.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/12.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/13.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/14.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/15.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/16.jpg" alt="" />
+            </div>
+            <!-- Duplicate Set for Seamless Infinite Loop -->
+            <div class="family-card">
+              <img src="images/bhai/17.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/18.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/11.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/12.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/13.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/bhai/14.jpg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 3 -->
+      <section class="family-section">
+        <h2 class="section-title">
+          Do chudails
+          <span style="font-size: 1.2rem; color: #64748b"
+            >(you all will get along)</span
+          >
+        </h2>
+        <div class="marquee-container" style="background: #f3e8ff">
+          <div
+            class="marquee-track track-left"
+            style="animation-duration: infinite"
+          >
+            <!-- Original Set -->
+            <div class="family-card">
+              <img src="images/2/01.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/02.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/03.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/04.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/05.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/01.jpg" alt="" />
+            </div>
+            <!-- Duplicate Set for Seamless Infinite Loop -->
+            <div class="family-card">
+              <img src="images/2/02.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/03.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/04.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/05.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/01.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/2/02.jpg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4 -->
+      <section class="family-section">
+        <h2 class="section-title warning-title">Inse dur rehna 🚫</h2>
+        <div
+          class="marquee-container"
+          style="background: #ffeaec; border-color: #dc2626"
+        >
+          <div
+            class="marquee-track track-right"
+            style="animation-duration: infinite"
+          >
+            <!-- Original Set -->
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/31.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/32.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/33.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/34.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/35.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/31.jpg" alt="" />
+            </div>
+            <!-- Duplicate Set for Seamless Infinite Loop -->
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/32.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/33.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/34.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/35.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/31.jpg" alt="" />
+            </div>
+            <div class="family-card" style="border-color: #dc2626">
+              <img src="images/madr/32.jpg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5 -->
+      <section class="family-section">
+        <h2 class="section-title">
+          GONNA BUY YOU
+          <span style="font-size: 1.2rem; color: #64748b">(Badle m kissi)</span>
+        </h2>
+        <div class="marquee-container" style="background: #f3e8ff">
+          <div
+            class="marquee-track track-left"
+            style="animation-duration: infinite"
+          >
+            <!-- Original Set -->
+            <div class="family-card">
+              <img src="images/items/21.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/22.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/23.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/24.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/21.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/22.jpg" alt="" />
+            </div>
+            <!-- Duplicate Set for Seamless Infinite Loop -->
+            <div class="family-card">
+              <img src="images/items/23.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/24.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/21.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/22.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/23.jpg" alt="" />
+            </div>
+            <div class="family-card">
+              <img src="images/items/24.jpg" alt="" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
