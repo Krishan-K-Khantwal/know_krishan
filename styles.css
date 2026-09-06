@@ -529,6 +529,32 @@ body {
   color: var(--accent-purple);
 }
 
+/* Family Page Link Button */
+.btn-family-link {
+  display: block;
+  width: 100%;
+  padding: 18px;
+  font-family: "Righteous", cursive;
+  font-size: 1.3rem;
+  color: #fff;
+  background: var(--accent-purple);
+  border: 3px solid var(--border-dark);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-family-link:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px var(--border-dark);
+}
+
+.btn-family-link:active {
+  transform: translate(3px, 3px);
+  box-shadow: var(--shadow-active);
+}
+
 /* ============================================================
    CARD-BY-CARD DECK QUIZ PANEL
    ============================================================ */
@@ -570,7 +596,7 @@ body {
 .deck-cards-wrapper {
   position: relative;
   min-height: 330px;
-  display: grid; /* Enables perfect stacking for the swipe transition */
+  display: grid;
 }
 
 /* Card Transitions with CSS Grid visibility trick */
@@ -778,6 +804,7 @@ body {
   color: #64748b;
 }
 
+/* Restored Clean Neo-brutalist Action Button */
 .btn-match {
   width: 100%;
   padding: 18px;
@@ -790,6 +817,7 @@ body {
   cursor: pointer;
   border-radius: var(--radius-sm);
   transition: all 0.15s ease;
+  margin-bottom: 14px;
 }
 
 .btn-match:hover {
@@ -813,7 +841,6 @@ body {
 }
 
 .btn-retake {
-  margin-top: 14px;
   background: transparent;
   border: none;
   font-family: inherit;
@@ -996,31 +1023,7 @@ body {
     cursor: auto !important;
   }
 }
-/* Family Page Link Button */
-.btn-family-link {
-  display: block;
-  width: 100%;
-  padding: 18px;
-  font-family: "Righteous", cursive;
-  font-size: 1.3rem;
-  color: #fff;
-  background: var(--accent-purple);
-  border: 3px solid var(--border-dark);
-  box-shadow: var(--shadow-block);
-  border-radius: var(--radius-sm);
-  text-decoration: none;
-  transition: all 0.15s ease;
-}
 
-.btn-family-link:hover {
-  transform: translate(-2px, -2px);
-  box-shadow: 8px 8px 0px var(--border-dark);
-}
-
-.btn-family-link:active {
-  transform: translate(3px, 3px);
-  box-shadow: var(--shadow-active);
-}
 @media (max-width: 900px) {
   .navbar {
     padding: 0 16px;

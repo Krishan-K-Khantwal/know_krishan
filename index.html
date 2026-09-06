@@ -13,7 +13,7 @@
       rel="stylesheet"
     />
 
-    <link rel="stylesheet" href="styles.css?v=4" />
+    <link rel="stylesheet" href="styles.css?v=6" />
   </head>
   <body>
     <div class="cursor-dot" id="cursorDot"></div>
@@ -77,7 +77,7 @@
             </div>
           </div>
 
-          <!-- Layer 4: Quiz Mode (New 4th Stage) -->
+          <!-- Layer 4: Quiz Mode -->
           <div class="char-layer layer-quiz" id="layerQuiz">
             <div class="avatar-ph avatar-nerd">
               <span class="sticker tag-quiz">🧠 RAB ne bnai jodi?</span>
@@ -202,32 +202,26 @@
               </p>
               <span class="reviewer">— Mom (Verified Household Owner)</span>
             </div>
-            <div class="testimonials">
-              <!-- Your existing review cards stay here -->
-            </div>
+          </div>
 
-            <!-- NEW: Family Page Link -->
+          <!-- Family Page Link -->
+          <div
+            class="family-link-container"
+            style="margin-top: 15px; text-align: center"
+          >
             <div
-              class="family-link-container"
-              style="margin-top: 40px; text-align: center"
+              class="badge-pop"
+              style="background: var(--accent-yellow); color: var(--text-dark)"
             >
-              <div
-                class="badge-pop"
-                style="
-                  background: var(--accent-yellow);
-                  color: var(--text-dark);
-                "
-              >
-                CLASSIFIED FILES
-              </div>
-              <a href="family.html" class="btn-family-link">
-                👨‍👩‍👧‍👦 View "Soon To Be Family" Docs →
-              </a>
+              CLASSIFIED FILES
             </div>
+            <a href="family.html" class="btn-family-link">
+              👨‍👩‍👧‍👦 View "Soon To Be Family" Docs →
+            </a>
           </div>
         </section>
 
-        <!-- Panel 4: Interactive Card-by-Card Deck Quiz -->
+        <!-- Panel 4: Interactive Card-by-Card Deck Quiz (8 Questions) -->
         <section class="panel panel-4" id="compatibility">
           <div class="interactive-card quiz-deck-container">
             <!-- Deck Top Header -->
@@ -244,7 +238,7 @@
               <div class="quiz-card card-intro active" data-step="0">
                 <h2 class="card-hero-title">Are We Destined or Cooked? 🧐</h2>
                 <p class="card-hero-subtitle">
-                  Find out our real-life compatibility before you text me. 5
+                  Find out our real-life compatibility before you text me. 8
                   quick scenarios. High stakes. Zero filters.
                 </p>
                 <div class="intro-perks">
@@ -262,7 +256,7 @@
 
               <!-- CARD 1: QUESTION 1 -->
               <div class="quiz-card" data-step="1">
-                <span class="q-badge">Question 1 of 5</span>
+                <span class="q-badge">Question 1 of 8</span>
                 <h3 class="q-heading">Ideal First Date Scenario?</h3>
                 <div class="quiz-options">
                   <button type="button" class="quiz-btn" data-score="98">
@@ -282,7 +276,7 @@
 
               <!-- CARD 2: QUESTION 2 -->
               <div class="quiz-card" data-step="2">
-                <span class="q-badge">Question 2 of 5</span>
+                <span class="q-badge">Question 2 of 8</span>
                 <h3 class="q-heading">Gol Gappe & Food Philosophy?</h3>
                 <div class="quiz-options">
                   <button type="button" class="quiz-btn" data-score="100">
@@ -294,32 +288,38 @@
                   <button type="button" class="quiz-btn" data-score="40">
                     🥗 Bland salad only, no chatpata cravings
                   </button>
+                  <button type="button" class="quiz-btn" data-score="40">
+                    💖 Will eat however you want Kucchu Puchu
+                  </button>
                 </div>
               </div>
 
               <!-- CARD 3: QUESTION 3 -->
               <div class="quiz-card" data-step="3">
-                <span class="q-badge">Question 3 of 5</span>
+                <span class="q-badge">Question 3 of 8</span>
                 <h3 class="q-heading">The Animal Kingdom Verdict?</h3>
                 <div class="quiz-options">
                   <button type="button" class="quiz-btn" data-score="100">
                     🐕 Dogs are priority babies at every event
                   </button>
-                  <button type="button" class="quiz-btn" data-score="65">
+                  <button type="button" class="quiz-btn" data-score="50">
                     🐾 Cute from afar, respectful distance
                   </button>
                   <button type="button" class="quiz-btn" data-score="15">
                     🚫 Hating dogs / liking cats exclusively
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="68">
+                    💁🏻 Dogs are cute , so are cats
                   </button>
                 </div>
               </div>
 
               <!-- CARD 4: QUESTION 4 -->
               <div class="quiz-card" data-step="4">
-                <span class="q-badge">Question 4 of 5</span>
+                <span class="q-badge">Question 4 of 8</span>
                 <h3 class="q-heading">Night Routine Protocol?</h3>
                 <div class="quiz-options">
-                  <button type="button" class="quiz-btn" data-score="100">
+                  <button type="button" class="quiz-btn" data-score="69">
                     🌙 Saying 'good night bachha' without fail
                   </button>
                   <button type="button" class="quiz-btn" data-score="75">
@@ -328,17 +328,20 @@
                   <button type="button" class="quiz-btn" data-score="20">
                     👻 Sleeping mid-convo with zero warning
                   </button>
+                  <button type="button" class="quiz-btn" data-score="100">
+                    🤗 Asking about each others day, and Bitching
+                  </button>
                 </div>
               </div>
 
               <!-- CARD 5: QUESTION 5 -->
               <div class="quiz-card" data-step="5">
-                <span class="q-badge">Question 5 of 5</span>
+                <span class="q-badge">Question 5 of 8</span>
                 <h3 class="q-heading">
                   When Weekend Plans Cancel Last Minute?
                 </h3>
                 <div class="quiz-options">
-                  <button type="button" class="quiz-btn" data-score="95">
+                  <button type="button" class="quiz-btn" data-score="68">
                     🛋️ Instant cozy movie night & ordering late desserts
                   </button>
                   <button type="button" class="quiz-btn" data-score="80">
@@ -347,11 +350,74 @@
                   <button type="button" class="quiz-btn" data-score="30">
                     😤 Pout and ruin the rest of the weekend
                   </button>
+                  <button type="button" class="quiz-btn" data-score="100">
+                    💃 Dancing and cookin together
+                  </button>
                 </div>
               </div>
 
-              <!-- CARD 6: FINAL RESULT CARD -->
-              <div class="quiz-card card-results" data-step="6">
+              <!-- CARD 6: QUESTION 6 -->
+              <div class="quiz-card" data-step="6">
+                <span class="q-badge">Question 6 of 8</span>
+                <h3 class="q-heading">3 AM Unhinged Meme Protocol?</h3>
+                <div class="quiz-options">
+                  <button type="button" class="quiz-btn" data-score="100">
+                    📱 Spam my DMs instantly with zero context
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="75">
+                    💾 Save it to show me in person tomorrow
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="20">
+                    😴 Go to sleep like a normal adult
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="30">
+                    😩 Send funny couple reels saying "us"
+                  </button>
+                </div>
+              </div>
+
+              <!-- CARD 7: QUESTION 7 -->
+              <div class="quiz-card" data-step="7">
+                <span class="q-badge">Question 7 of 8</span>
+                <h3 class="q-heading">When The Existential Dread Hits?</h3>
+                <div class="quiz-options">
+                  <button type="button" class="quiz-btn" data-score="86">
+                    🌌 Stare at the ceiling and talk about the universe
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="85">
+                    🤡 Make a concerningly dark joke and move on
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="15">
+                    🧱 Shut down entirely and push everyone away
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="100">
+                    🫶 Talk about it with me
+                  </button>
+                </div>
+              </div>
+
+              <!-- CARD 8: QUESTION 8 -->
+              <div class="quiz-card" data-step="8">
+                <span class="q-badge">Question 8 of 8</span>
+                <h3 class="q-heading">Your Core Philosophy on Love?</h3>
+                <div class="quiz-options">
+                  <button type="button" class="quiz-btn" data-score="100">
+                    🏗️ It’s a daily choice to build a safe, peaceful space
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="80">
+                    🌪️ It’s spontaneous, chaotic energy and endless fun
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="20">
+                    🎬 If it isn't effortless like a movie, I'm out
+                  </button>
+                  <button type="button" class="quiz-btn" data-score="30">
+                    ☺️ If It’s youuu its perfect
+                  </button>
+                </div>
+              </div>
+
+              <!-- CARD 9: FINAL RESULT CARD -->
+              <div class="quiz-card card-results" data-step="9">
                 <h2 class="card-hero-title">Calculation Complete ✨</h2>
 
                 <div class="quiz-result">
@@ -368,6 +434,7 @@
                   </div>
                 </div>
 
+                <!-- Restored Standard Action Button -->
                 <button type="button" class="btn-match" id="matchBtn">
                   🚀 Swipe Right / Lock In Date
                 </button>
@@ -378,7 +445,7 @@
               </div>
             </div>
 
-            <!-- Bottom Navigation Bar (Cards 1-5) -->
+            <!-- Bottom Navigation Bar (Cards 1-8) -->
             <div
               class="deck-nav-controls"
               id="deckNavControls"

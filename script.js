@@ -17,21 +17,18 @@ function initCustomCursor() {
 
   if (!dot || !ring) return;
 
-  // Center both elements relative to coordinates
   gsap.set([dot, ring], {
     xPercent: -50,
     yPercent: -50,
   });
 
   window.addEventListener("mousemove", (e) => {
-    // Instant snap for the inner dot
     gsap.to(dot, {
       x: e.clientX,
       y: e.clientY,
       duration: 0,
     });
 
-    // Smooth physics tracking for the outer ring
     gsap.to(ring, {
       x: e.clientX,
       y: e.clientY,
@@ -40,7 +37,6 @@ function initCustomCursor() {
     });
   });
 
-  // Scale cursor smoothly on hoverable elements
   const hoverables = document.querySelectorAll(
     "button, a, .quirk-pill, .spec-card, .drift-cell",
   );
@@ -64,7 +60,6 @@ function initCustomCursor() {
 
 /**
  * 2. Visual Layer Transitions Driven by Scroll (4 Outfits)
- * FIX: Explicit fromTo properties & progress tracking for bulletproof reverse scrolling.
  */
 function initScrollAnimations() {
   const layerFormal = document.getElementById("layerFormal");
@@ -77,7 +72,6 @@ function initScrollAnimations() {
   const dot3 = document.getElementById("dot3");
   const dot4 = document.getElementById("dot4");
 
-  // Master Timeline for 4 Outfits
   const stageTimeline = gsap.timeline({
     scrollTrigger: {
       trigger: ".scroll-container",
@@ -85,7 +79,6 @@ function initScrollAnimations() {
       end: "bottom bottom",
       scrub: 0.8,
       onUpdate: (self) => {
-        // Tie the HUD dots directly to scroll math so it never breaks in reverse
         const p = self.progress;
         if (p < 0.25) updateHUD(1);
         else if (p >= 0.25 && p < 0.58) updateHUD(2);
@@ -95,7 +88,6 @@ function initScrollAnimations() {
     },
   });
 
-  // Phase 1 -> 2: Formal into Casual
   stageTimeline
     .fromTo(
       layerFormal,
@@ -109,8 +101,6 @@ function initScrollAnimations() {
       { opacity: 1, duration: 1, ease: "power1.inOut" },
       0,
     )
-
-    // Phase 2 -> 3: Casual into Censored Beach Mode
     .fromTo(
       layerCasual,
       { opacity: 1 },
@@ -123,8 +113,6 @@ function initScrollAnimations() {
       { opacity: 1, duration: 1, ease: "power1.inOut" },
       1,
     )
-
-    // Phase 3 -> 4: Beach Mode into Quiz Detective Mode
     .fromTo(
       layerBeach,
       { opacity: 1 },
@@ -148,7 +136,6 @@ function initScrollAnimations() {
     if (step === 4 && dot4) dot4.classList.add("active");
   }
 
-  // Floating Micro-Animations for Text and Cards
   gsap.utils.toArray(".panel").forEach((panel) => {
     gsap.from(panel.children, {
       y: 40,
@@ -165,7 +152,7 @@ function initScrollAnimations() {
 }
 
 /**
- * 3. Card-by-Card Swipe Deck Quiz Engine (5 Questions + Pass/Fail Logic)
+ * 3. Card-by-Card Swipe Deck Quiz Engine (8 Questions + Restored Match Button)
  */
 function initCompatibilityQuiz() {
   const cards = document.querySelectorAll(".quiz-card");
@@ -181,8 +168,8 @@ function initCompatibilityQuiz() {
   const subtext = document.getElementById("scoreSubtext");
   const matchBtn = document.getElementById("matchBtn");
 
-  let currentStep = 0; // 0: Intro, 1-5: Questions, 6: Results
-  const totalQuestions = 5;
+  let currentStep = 0;
+  const totalQuestions = 8;
   const userAnswers = {};
 
   function showStep(step) {
@@ -201,22 +188,20 @@ function initCompatibilityQuiz() {
         progressLabel.innerText = `Step ${currentStep} of ${totalQuestions}`;
       if (prevBtn) prevBtn.style.display = currentStep === 1 ? "none" : "block";
 
-      // Unlock 'Next' only if user picked an option for this question
       if (nextBtn) {
         nextBtn.disabled = !userAnswers[currentStep];
         nextBtn.innerText =
           currentStep === totalQuestions ? "Finish & Compute 🎯" : "Next →";
       }
-    } else if (currentStep === 6) {
+    } else if (currentStep === 9) {
       if (navControls) navControls.style.display = "none";
       if (progressLabel) progressLabel.innerText = "Completed ✨";
       computeFinalScore();
     }
   }
 
-  // Handle Option Clicks on Questions 1 through 5
   const questionCards = document.querySelectorAll(
-    ".quiz-card[data-step='1'], .quiz-card[data-step='2'], .quiz-card[data-step='3'], .quiz-card[data-step='4'], .quiz-card[data-step='5']",
+    ".quiz-card[data-step='1'], .quiz-card[data-step='2'], .quiz-card[data-step='3'], .quiz-card[data-step='4'], .quiz-card[data-step='5'], .quiz-card[data-step='6'], .quiz-card[data-step='7'], .quiz-card[data-step='8']",
   );
 
   questionCards.forEach((card) => {
@@ -231,7 +216,6 @@ function initCompatibilityQuiz() {
         const score = parseInt(btn.dataset.score, 10);
         userAnswers[qIndex] = score;
 
-        // Unlock next button, but wait for manual click to proceed
         if (nextBtn) nextBtn.disabled = false;
       });
     });
@@ -240,12 +224,13 @@ function initCompatibilityQuiz() {
   if (startBtn) startBtn.addEventListener("click", () => showStep(1));
   if (prevBtn)
     prevBtn.addEventListener("click", () => showStep(currentStep - 1));
+
   if (nextBtn) {
     nextBtn.addEventListener("click", () => {
       if (currentStep < totalQuestions) {
         showStep(currentStep + 1);
       } else {
-        showStep(6);
+        showStep(9);
       }
     });
   }
@@ -274,7 +259,6 @@ function initCompatibilityQuiz() {
         verdict.innerHTML =
           "<strong>Soulmate Energy!</strong> We have high synergy and chaotic masti.";
       if (matchBtn) {
-        matchBtn.disabled = false;
         matchBtn.className = "btn-match pass";
         matchBtn.innerText = "🚀 Swipe Right / Lock In Date!";
       }
@@ -284,18 +268,14 @@ function initCompatibilityQuiz() {
         verdict.innerHTML =
           "<strong>Zero Synergy.</strong> We would disagree on snacks, dogs, and sleep schedules.";
       if (matchBtn) {
-        matchBtn.disabled = false;
         matchBtn.className = "btn-match fail";
         matchBtn.innerText = "💀 Better luck next life!";
       }
     }
   }
 
-  // Final Action Handling & WhatsApp Redirection
   if (matchBtn) {
     matchBtn.addEventListener("click", () => {
-      if (matchBtn.disabled) return;
-
       const scores = Object.values(userAnswers);
       const average = Math.round(
         scores.reduce((a, b) => a + b, 0) / (scores.length || 1),
@@ -309,7 +289,6 @@ function initCompatibilityQuiz() {
             "https://wa.me/917505380696?text=HEY!!%20Cutie!";
         }, 2000);
       } else {
-        // Playful rejection wobble
         gsap.fromTo(
           matchBtn,
           { x: -10 },
@@ -326,7 +305,6 @@ function initCompatibilityQuiz() {
   }
 }
 
-// Number tick-up animation helper
 function animateCounter(element, target) {
   if (!element) return;
   let current = 0;
@@ -341,7 +319,6 @@ function animateCounter(element, target) {
   }, 25);
 }
 
-// Confetti burst logic using canvas-confetti
 function fireConfetti() {
   if (typeof confetti !== "function") return;
 
@@ -354,7 +331,7 @@ function fireConfetti() {
 }
 
 /**
- * 4. Drift Wall Mechanics (Desktop Mouse + Mobile Touch)
+ * 4. Drift Wall Mechanics
  */
 function initDriftWall() {
   const stage = document.querySelector(".drift-stage");
@@ -377,12 +354,10 @@ function initDriftWall() {
     targetY = y * (isMobile ? -60 : -140);
   }
 
-  // Desktop Mouse
   stage.addEventListener("mousemove", (e) => {
     updateCoordinates(e.clientX, e.clientY);
   });
 
-  // Mobile Touch
   stage.addEventListener(
     "touchmove",
     (e) => {
@@ -398,7 +373,6 @@ function initDriftWall() {
     targetY = 0;
   });
 
-  // Smooth lerp rendering loop
   function animateDrift() {
     currentX += (targetX - currentX) * 0.08;
     currentY += (targetY - currentY) * 0.08;
