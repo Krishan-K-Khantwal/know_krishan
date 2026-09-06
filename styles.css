@@ -306,6 +306,75 @@ body {
   transform: rotate(-6deg);
 }
 
+/* ============================================================
+   FORMAL & CASUAL CUSTOM ACCENTS (Desktop Defaults)
+   ============================================================ */
+
+/* Formal Badges & Stamp */
+.badge-formal-1 {
+  bottom: 55px;
+  left: 20px;
+  background: var(--accent-cyan);
+  color: var(--text-dark);
+  transform: rotate(-6deg);
+}
+
+.badge-formal-2 {
+  top: 140px;
+  right: 25px;
+  background: #10b981;
+  color: #ffffff;
+  transform: rotate(7deg);
+}
+
+.stamp-verified {
+  position: absolute;
+  top: 85px;
+  left: 20px;
+  border: 2px dashed var(--accent-pink);
+  color: var(--accent-pink);
+  font-family: "Righteous", cursive;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  transform: rotate(-12deg);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 2px 2px 0px var(--accent-pink);
+  pointer-events: none;
+  z-index: 6;
+}
+
+/* Casual Badges & Tag */
+.badge-casual-1 {
+  bottom: 60px;
+  left: 25px;
+  background: var(--accent-yellow);
+  color: var(--text-dark);
+  transform: rotate(5deg);
+}
+
+.badge-casual-2 {
+  top: 130px;
+  right: 20px;
+  background: #f97316;
+  color: #ffffff;
+  transform: rotate(-8deg);
+}
+
+.snack-doodle {
+  position: absolute;
+  bottom: 100px;
+  right: 25px;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 0.7rem;
+  background: #ffffff;
+  border: 2px solid var(--border-dark);
+  padding: 3px 6px;
+  transform: rotate(4deg);
+  box-shadow: 2px 2px 0px var(--border-dark);
+  z-index: 6;
+}
+
 /* Layer HUD Step Indicators */
 .layer-indicator {
   position: absolute;
@@ -1128,6 +1197,34 @@ body {
     font-size: 0.55rem !important;
     padding: 2px 5px !important;
     transform: rotate(-4deg) !important;
+  }
+
+  /* Mobile Overrides for Formal & Casual Accents */
+  .badge-formal-1,
+  .badge-casual-1 {
+    bottom: 28px !important;
+    left: 8px !important;
+    font-size: 0.55rem !important;
+    padding: 2px 5px !important;
+  }
+
+  .badge-formal-2,
+  .badge-casual-2 {
+    top: 12px !important;
+    right: 8px !important;
+    font-size: 0.55rem !important;
+    padding: 2px 5px !important;
+  }
+
+  .stamp-verified {
+    top: 38px !important;
+    left: 8px !important;
+    font-size: 0.5rem !important;
+    padding: 2px 4px !important;
+  }
+
+  .snack-doodle {
+    display: none !important;
   }
 
   /* HUD Indicator scaled to accommodate all 4 dots comfortably */
