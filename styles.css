@@ -1311,3 +1311,32 @@ body {
     height: 105px !important;
   }
 }
+/* Navigation Actions Cluster */
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Specific Accent for Careers Pill */
+.pill-jd {
+  background: var(--accent-cyan);
+}
+
+.pill-jd:hover {
+  background: var(--accent-pink);
+  color: #ffffff;
+}
+
+/* Mobile Responsiveness for 2 Nav Buttons */
+@media (max-width: 900px) {
+  .nav-actions {
+    gap: 6px;
+  }
+
+  .pill-jd,
+  .cta-pill-nav {
+    font-size: 0.72rem !important;
+    padding: 6px 10px !important;
+  }
+}

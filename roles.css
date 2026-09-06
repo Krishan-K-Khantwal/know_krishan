@@ -1,0 +1,249 @@
+/* ============================================================
+   ROLES / JOB DESCRIPTION DOSSIER STYLES
+   ============================================================ */
+
+.roles-body {
+  background-color: var(--bg-primary);
+  min-height: 100vh;
+}
+
+.roles-container {
+  max-width: 860px;
+  margin: 100px auto 60px auto;
+  padding: 0 20px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* Red Classified Rubber Stamp */
+.urgent-stamp {
+  position: absolute;
+  top: 0px;
+  right: 30px;
+  font-family: "Righteous", cursive;
+  font-size: 1.2rem;
+  color: #ef4444;
+  border: 4px dashed #ef4444;
+  padding: 6px 14px;
+  text-transform: uppercase;
+  transform: rotate(12deg);
+  pointer-events: none;
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 3px 3px 0px #ef4444;
+  z-index: 10;
+}
+
+.jd-card {
+  background: #ffffff;
+  border: 4px solid var(--border-dark);
+  box-shadow: var(--shadow-block);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  position: relative;
+}
+
+.jd-title {
+  font-family: "Righteous", cursive;
+  font-size: 2.5rem;
+  line-height: 1.2;
+  margin: 14px 0 24px 0;
+}
+
+.meta-strip-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  background: #f8fafc;
+  border: 3px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.meta-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.meta-label {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.meta-val {
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.jd-desc {
+  font-size: 1.15rem;
+  line-height: 1.6;
+  color: #334155;
+  margin-top: 10px;
+}
+
+.jd-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 15px;
+}
+
+.jd-list li {
+  position: relative;
+  padding-left: 30px;
+  font-size: 1.05rem;
+}
+
+.jd-list li::before {
+  content: "⚡";
+  position: absolute;
+  left: 0;
+  font-size: 1rem;
+}
+
+/* Neo-Brutalist Data Table */
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+.jd-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  border: 3px solid var(--border-dark);
+  box-shadow: 4px 4px 0px var(--border-dark);
+  background: #ffffff;
+}
+
+.jd-table th,
+.jd-table td {
+  padding: 16px 20px;
+  border: 2px solid var(--border-dark);
+  font-size: 0.95rem;
+}
+
+.jd-table th {
+  background: var(--accent-yellow);
+  font-family: "Righteous", cursive;
+  font-size: 1.1rem;
+}
+
+.jd-table tr:nth-child(even) {
+  background: #f8fafc;
+}
+
+/* Career Progression Ladder */
+.probation-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.probation-box {
+  background: #fff;
+  border: 3px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+  box-shadow: 4px 4px 0px var(--border-dark);
+}
+
+.probation-box h3 {
+  font-family: "Righteous", cursive;
+  font-size: 1.25rem;
+  margin-bottom: 8px;
+}
+
+.probation-box.permanent {
+  background: #fdf4ff;
+  border-color: var(--accent-purple);
+  box-shadow: 4px 4px 0px var(--accent-purple);
+}
+
+.probation-box.permanent h3 {
+  color: var(--accent-purple);
+}
+
+/* Action Strip */
+.fine-print {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #475569;
+  background: #fef2f2;
+  border: 2px solid #ef4444;
+  padding: 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 24px;
+}
+
+.btn-apply-action {
+  display: block;
+  text-align: center;
+  width: 100%;
+  padding: 20px;
+  font-family: "Righteous", cursive;
+  font-size: 1.4rem;
+  color: #ffffff;
+  background: #10b981;
+  border: 4px solid var(--border-dark);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-block);
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.btn-apply-action:hover {
+  transform: translate(-3px, -3px);
+  box-shadow: 10px 10px 0px var(--border-dark);
+  background: #059669;
+}
+
+.btn-apply-action:active {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-active);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .roles-container {
+    margin-top: 80px;
+  }
+
+  .urgent-stamp {
+    position: static;
+    display: inline-block;
+    margin-bottom: 12px;
+    transform: rotate(-3deg);
+    font-size: 0.95rem;
+  }
+
+  .jd-card {
+    padding: 22px 18px;
+  }
+
+  .jd-title {
+    font-size: 1.85rem;
+  }
+
+  .meta-strip-grid,
+  .probation-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn-apply-action {
+    font-size: 1.1rem;
+    padding: 16px;
+  }
+}
+.badge-pop.badge-perks {
+  background: rgba(168, 85, 247, 0.12) !important;
+  color: #c084fc !important;
+  border: 1px solid rgba(168, 85, 247, 0.35) !important;
+}

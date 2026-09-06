@@ -1,11 +1,26 @@
-// Register GSAP plugins
-gsap.registerPlugin(ScrollTrigger);
+// Register GSAP plugins safely only if ScrollTrigger exists
+if (typeof ScrollTrigger !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 document.addEventListener("DOMContentLoaded", () => {
+  // Always runs first on both index.html & roles.html
   initCustomCursor();
-  initScrollAnimations();
-  initCompatibilityQuiz();
-  initDriftWall();
+
+  // Runs ONLY on index.html where the character scroll container exists
+  if (document.getElementById("layerFormal")) {
+    initScrollAnimations();
+  }
+
+  // Runs ONLY on index.html where the quiz deck exists
+  if (document.querySelector(".quiz-deck-container")) {
+    initCompatibilityQuiz();
+  }
+
+  // Runs ONLY on index.html where the drift wall stage exists
+  if (document.getElementById("driftBoard")) {
+    initDriftWall();
+  }
 });
 
 /**
@@ -17,18 +32,20 @@ function initCustomCursor() {
 
   if (!dot || !ring) return;
 
+  // Center both elements relative to coordinates
   gsap.set([dot, ring], {
     xPercent: -50,
     yPercent: -50,
   });
 
   window.addEventListener("mousemove", (e) => {
-    gsap.to(dot, {
+    // Instant snap for inner dot
+    gsap.set(dot, {
       x: e.clientX,
       y: e.clientY,
-      duration: 0,
     });
 
+    // Smooth physics tracking for outer ring
     gsap.to(ring, {
       x: e.clientX,
       y: e.clientY,
@@ -37,8 +54,9 @@ function initCustomCursor() {
     });
   });
 
+  // Scale cursor smoothly on hoverable elements
   const hoverables = document.querySelectorAll(
-    "button, a, .quirk-pill, .spec-card, .drift-cell",
+    "button, a, .quirk-pill, .spec-card, .drift-cell, .jd-card, .meta-item",
   );
   hoverables.forEach((el) => {
     el.addEventListener("mouseenter", () => {
@@ -152,7 +170,7 @@ function initScrollAnimations() {
 }
 
 /**
- * 3. Card-by-Card Swipe Deck Quiz Engine (8 Questions + Restored Match Button)
+ * 3. Card-by-Card Swipe Deck Quiz Engine
  */
 function initCompatibilityQuiz() {
   const cards = document.querySelectorAll(".quiz-card");
@@ -289,6 +307,8 @@ function initCompatibilityQuiz() {
             "https://wa.me/917505380696?text=HEY!!%20Cutie!";
         }, 2000);
       } else {
+        fireFailureRain();
+
         gsap.fromTo(
           matchBtn,
           { x: -10 },
@@ -327,6 +347,27 @@ function fireConfetti() {
     spread: 70,
     origin: { y: 0.7 },
     colors: ["#ff4071", "#00e5ff", "#ffe600", "#7000ff"],
+  });
+}
+
+function fireFailureRain() {
+  if (typeof confetti !== "function") return;
+
+  const sadShapes = [
+    confetti.shapeFromText({ text: "💀", scalar: 2 }),
+    confetti.shapeFromText({ text: "💔", scalar: 2 }),
+    confetti.shapeFromText({ text: "🥀", scalar: 2 }),
+  ];
+
+  confetti({
+    particleCount: 40,
+    spread: 100,
+    startVelocity: 15,
+    gravity: 1.2,
+    ticks: 200,
+    origin: { y: 0 },
+    shapes: sadShapes,
+    scalar: 2,
   });
 }
 
